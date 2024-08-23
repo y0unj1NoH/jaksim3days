@@ -25,9 +25,13 @@ async function init() {
   const db = await connectDB();
   await Posts.init(db);
 
-  app.listen(PORT, () => {
-    console.log("Server is running on http://localhost:5000");
-  });
+  if (process.env.VERCEL) {
+		console.log("Vercel 환경에서는 서버를 시작하지 않습니다.");
+	} else {
+    app.listen(PORT, () => {
+      console.log("Server is running on http://localhost:5000");
+    });
+	}
 
   process.on("SIGINT", async () => {
     try {
