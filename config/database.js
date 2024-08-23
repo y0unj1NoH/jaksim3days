@@ -3,8 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
-const uri = `mongodb+srv://younji:${MONGO_PASSWORD}@3days.difhc.mongodb.net/?retryWrites=true&w=majority&appName=3days
-`;
+const uri = `mongodb+srv://younji:${MONGO_PASSWORD}@3days.difhc.mongodb.net/?retryWrites=true&w=majority&appName=3days`;
 const client = new MongoClient(uri);
 
 async function connectDB() {
@@ -18,4 +17,4 @@ async function connectDB() {
     process.exit(1); // 서버 종료
   }
 }
-export { connectDB };
+export default connectDB;

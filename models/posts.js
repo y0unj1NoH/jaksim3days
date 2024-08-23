@@ -2,19 +2,16 @@ let db;
 
 class Posts {
   static async init(_db) {
+    if (_db) return;
     try {
       db = _db;
     } catch (e) {
-      console.error(`db 연결 실패: ${e}`);
+      console.error("db 연결 실패", e);
     }
   }
 
   static async getAll() {
-    return await db
-      .collection("posts")
-      .find()
-      .sort({ _id: -1 }) // .limit(3) // 필요시 주석 해제
-      .toArray();
+    return await db.collection("posts").find().sort({ _id: -1 }).toArray();
   }
 
   static async getOne(id) {

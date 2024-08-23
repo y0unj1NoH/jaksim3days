@@ -4,7 +4,6 @@ import { ObjectId } from "mongodb";
 export const getPosts = async (req, res) => {
   try {
     const posts = await Posts.getAll();
-    console.log(posts);
     res.render("posts", { posts: posts });
   } catch (e) {
     console.error(e);
@@ -70,7 +69,7 @@ export const updatePost = async (req, res) => {
       return res.json({
         message: "success",
         success: true,
-        redirectUrl: `/posts/${req.params.id.toString()}`
+        redirectUrl: `/posts/${req.params.id}`
       });
     } else {
       return res.status(404).json({ message: "Not found", success: false });
