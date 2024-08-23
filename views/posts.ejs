@@ -1,0 +1,51 @@
+<%- include("./header.ejs") %>
+<main>
+  <h2>목록 보기 총:<%=posts.length %></h2>
+  <ul id="list-con">
+    <%- posts.length === 0 ? `
+    <li>아직 컨텐츠가 없습니다</li>
+    ` : posts.map(post =>`
+    <li data-postNum="${post._id}" class="list">
+      <p class="title">할일 : ${post.title}</p>
+      <div>
+        <p>작성일 : ${post.createDate} / 목표일 : ${post.goalDate}</p>
+        <button class="detail-btn">세부사항 보기</button>
+        <button class="delete-btn">삭제</button>
+      </div>
+    </li>
+    `).join("") %>
+  </ul>
+</main>
+<script>
+  const listCon = document.getElementById("list-con");
+  listCon.addEventListener("click", async (e) => {
+    if (e.target.tagName !== "BUTTON") {
+      return;
+    }
+
+    const listItem = e.target.closest(".list");
+    if (!listItem) {
+      return;
+    }
+    console.log(e.target);
+    const postId = e.target.closest(".list").dataset.postnum;
+    console.log(postId);
+
+    if (e.target.classList.contains("delete-btn")) {
+      try {
+        const res = await fetch(`/posts/${postId}`, { method: "DELETE" });
+        const data = await res.json();
+        if (data.success) {
+          location.reload();
+        }
+      } catch (err) {
+        alert(data.message || "삭제가 실패하였습니다.");
+        console.error(err);
+      }
+    } else if (e.target.classList.contains("detail-btn")) {
+      location.href = `/posts/${postId}`;
+    }
+    return;
+  });
+</script>
+<%- include("./footer.ejs")%>

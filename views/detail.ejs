@@ -1,0 +1,46 @@
+<%- include("./header.ejs") %>
+<main>
+  <h2>상세 페이지</h2>
+  <div class="detail-container">
+    <p>id: <%= post._id %></p>
+    <p>할일: <%= post.title %></p>
+    <p>작성일: <%= post.createDate %></p>
+    <p>목표일: <%= post.goalDate %></p>
+    <div>
+      <p>상세 내용</p>
+      <p><%= post.detail %></p>
+    </div>
+    <a href="/posts" class="back-btn">목록으로</a>
+    <button class="update-btn" id="update-btn">수정하기</button>
+    <button class="delete-btn" id="delete-btn">삭제하기</button>
+  </div>
+</main>
+
+<script>
+  const updateBtn = document.getElementById("update-btn");
+  const deleteBtn = document.getElementById("delete-btn");
+
+  updateBtn.addEventListener("click", () => {
+    console.log("수정하기 버튼 클릭");
+    location.href = `/newpost/<%= post._id %>`;
+  });
+
+  deleteBtn.addEventListener("click", () => {
+    const confirmDelete = confirm("정말 삭제하시겠습니까?");
+    if (confirmDelete) {
+      fetch(`/posts/<%= post._id %>`, {
+        method: "DELETE"
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            alert("삭제되었습니다.");
+            location.href = "/posts";
+          } else {
+            alert("삭제에 실패했습니다.");
+          }
+        });
+    }
+  });
+</script>
+<%- include("./footer.ejs")%>

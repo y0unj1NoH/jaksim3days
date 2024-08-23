@@ -1,0 +1,83 @@
+<%- include("./header.ejs") %>
+<main>
+  <h2>수정하기</h2>
+  <form id="edit-form">
+    <label for="title">할일 입력</label>
+    <input
+      type="text"
+      name="title"
+      id="title"
+      placeholder="할일 입력"
+      required
+    />
+    <label for="goal-date">목표 날짜</label>
+    <input type="date" name="goalDate" id="goal-date" />
+
+    <label hidden for="create-date">작성 날짜</label>
+    <input hidden type="date" name="createDate" id="create-date" />
+
+    <label for="detail">상세 내역</label>
+    <textarea name="detail" id="detail"></textarea>
+
+    <input type="submit" class="submit-btn" id="submit-btn" value="등록하기" />
+  </form>
+  <p class="alert-message" id="alert-message">알림 메시지</p>
+</main>
+<script>
+  const titleInput = document.getElementById("title");
+  const goalDateInput = document.getElementById("goal-date");
+  const createDateInput = document.getElementById("create-date");
+  const detailInput = document.getElementById("detail");
+  const alertMessage = document.getElementById("alert-message");
+  const submitBtn = document.getElementById("submit-btn");
+  const editForm = document.getElementById("edit-form");
+
+  titleInput.value = "<%= post.title %>";
+  goalDateInput.value = "<%= post.goalDate %>";
+  detailInput.value = "<%= post.detail %>";
+
+  editForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const title = titleInput.value;
+    const goalDate = goalDateInput.value;
+    const detail = detailInput.value;
+    const today = new Date().toISOString().slice(0, 10);
+
+    if (!title || !goalDate) {
+      alertMessage.textContent = "할일과 목표 날짜는 필수 입력 사항입니다.";
+      return;
+    }
+
+    if (new Date(goalDate) < new Date(today)) {
+      alertMessage.textContent = "목표 날짜는 오늘 이후로 설정해주세요.";
+      return;
+    }
+
+    try {
+      const res = await fetch(`/newpost/<%= post._id %>`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          title: title,
+          goalDate: goalDate,
+          createDate: today,
+          detail: detail
+        })
+      });
+
+      console.log(res);
+      if (res.ok) {
+        location.href = "/posts/<%= post._id %>";
+      } else {
+        alertMessage.textContent = "수정에 실패했습니다.";
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  });
+</script>
+
+<%- include("./footer.ejs")%>

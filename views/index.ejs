@@ -1,0 +1,57 @@
+<%- include("./header.ejs") %>
+<main>
+  <h2>작성하기</h2>
+  <form action="/posts" method="post">
+    <label for="title">할일 입력</label>
+    <input
+      type="text"
+      name="title"
+      id="title"
+      placeholder="할일 입력"
+      required
+    />
+    <label for="goal-date">목표 날짜</label>
+    <input type="date" name="goalDate" id="goal-date" />
+
+    <label hidden for="create-date">작성 날짜</label>
+    <input hidden type="date" name="createDate" id="create-date" />
+
+    <label for="detail">상세 내역</label>
+    <textarea name="detail" id="detail"></textarea>
+
+    <button type="submit" id="submit-btn">등록</button>
+  </form>
+  <p class="alert-message" id="alert-message">알림 메시지</p>
+</main>
+<script>
+  const titleInput = document.getElementById("title");
+  const goalDateInput = document.getElementById("goal-date");
+  const createDateInput = document.getElementById("create-date");
+  const detailInput = document.getElementById("detail");
+  const alertMessage = document.getElementById("alert-message");
+  const submitBtn = document.getElementById("submit-btn");
+
+  submitBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    const title = titleInput.value;
+    const goalDate = goalDateInput.value;
+    const detail = detailInput.value;
+
+    const today = new Date().toISOString().split("T")[0];
+    createDateInput.value = today;
+
+    if (!title || !goalDate) {
+      alertMessage.textContent = "할일과 목표 날짜는 필수 입력 사항입니다.";
+      return;
+    }
+
+    if (new Date(goalDate) < new Date(today)) {
+      alertMessage.textContent = "목표 날짜는 오늘 이후로 설정해주세요.";
+      return;
+    }
+
+    document.querySelector("form").submit();
+  });
+</script>
+
+<%- include("./footer.ejs")%>
