@@ -24,8 +24,8 @@ app.get("/", (req, res) => {
 app.use("/", postsRoutes);
 
 async function init() {
-  const db = await connectDB();
-  await Posts.init(db);
+  const client = await connectDB();
+  await Posts.init(client);
 
   if (process.env.VERCEL) {
 		console.log("Vercel 환경에서는 서버를 시작하지 않습니다.");

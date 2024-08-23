@@ -9,9 +9,7 @@ const client = new MongoClient(uri);
 async function connectDB() {
   try {
     await client.connect();
-    console.log("DB connected");
-    const db = client.db("3days");
-    return db;
+    return client;
   } catch (e) {
     console.error("DB 연결 실패", e);
     process.exit(1); // 서버 종료

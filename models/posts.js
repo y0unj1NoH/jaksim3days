@@ -1,10 +1,10 @@
 let db;
 
 class Posts {
-  static async init(_db) {
+  static async init(client) {
     if (db) return;
     try {
-      db = _db;
+      db = client.db("3days");
     } catch (e) {
       console.error("db 연결 실패", e);
     }
