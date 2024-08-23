@@ -6,8 +6,7 @@ export const getPosts = async (req, res) => {
     const posts = await Posts.getAll();
     res.render("posts", { posts: posts });
   } catch (e) {
-    console.error(e);
-    res.status(500).send("서버 오류가 발생했습니다.");
+    res.status(500).send(`${e}: 서버 오류가 발생했습니다.`);
   }
 };
 
@@ -19,8 +18,7 @@ export const getPost = async (req, res) => {
     }
     res.render("detail", { post: post });
   } catch (e) {
-    console.error(e);
-    res.status(500).send("서버 오류가 발생했습니다.");
+    res.status(500).send(`${e}: 서버 오류가 발생했습니다.`);
   }
 };
 
@@ -29,8 +27,7 @@ export const createPost = async (req, res) => {
     await Posts.create(req.body);
     res.redirect("posts");
   } catch (e) {
-    console.error(e);
-    res.status(500).send("서버 오류가 발생했습니다.");
+    res.status(500).send(`${e}: 서버 오류가 발생했습니다.`);
   }
 };
 
@@ -44,8 +41,7 @@ export const deletePost = async (req, res) => {
       return res.json({ message: "success", success: true });
     }
   } catch (e) {
-    console.error(e);
-    return res.status(500).json({ message: "error", success: false });
+    return res.status(500).send(`${e}: 서버 오류가 발생했습니다.`);
   }
 };
 
@@ -57,8 +53,7 @@ export const getNewPost = async (req, res) => {
     }
     res.render("newpost", { post: post });
   } catch (e) {
-    console.error(e);
-    res.status(500).send("서버 오류가 발생했습니다.");
+    res.status(500).send(`${e}: 서버 오류가 발생했습니다.`);
   }
 };
 
@@ -75,7 +70,6 @@ export const updatePost = async (req, res) => {
       return res.status(404).json({ message: "Not found", success: false });
     }
   } catch (e) {
-    console.error(e);
-    return res.status(500).json({ message: "error", success: false });
+    return res.status(500).send(`${e}: 서버 오류가 발생했습니다.`);
   }
 };
