@@ -2,7 +2,7 @@ let db;
 
 class Posts {
   static async init(_db) {
-    if (_db) return;
+    if (db) return;
     try {
       db = _db;
     } catch (e) {
